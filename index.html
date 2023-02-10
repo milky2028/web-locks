@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      const start = performance.now();
+      function reply() {
+        globalThis.addEventListener("message", () => {
+          globalThis.postMessage("received");
+        });
+      }
+
+      await new Promise((resolve) => {
+        const blob = new Blob([`(${reply.toString()})()`], {
+          type: "text/javascript",
+        });
+
+        const worker = new Worker(URL.createObjectURL(blob));
+        worker.postMessage("started");
+
+        worker.addEventListener("message", () => resolve());
+      });
+
+      console.log(
+        `worker creation and response time:`,
+        performance.now() - start
+      );
+    </script>
+  </body>
+</html>

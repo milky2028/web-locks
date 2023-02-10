@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      function ignore(error) {}
+
+      /** Releases a lock created by the Web Locks API by stealing the existing lock, then immediately resolving it. */
+      export function releaseLock(name) {
+        return navigator.locks.request(name, { steal: true }, () => {});
+      }
+
+      /** Creates an exclusive lock with the Web Locks API that is held open indefinitely. Pending locks cannot be created. */
+      export function createLock(name) {
+        navigator.locks
+          .request(
+            name,
+            { ifAvailable: true },
+            () => new Promise((_resolve) => {})
+          )
+          .catch(ignore);
+      }
+
+      const lock = await createLock("tylers_lock");
+      console.log(await navigator.locks.query());
+
+      // await releaseLock("tylers_lock");
+      console.log(await navigator.locks.query());
+    </script>
+  </body>
+</html>
