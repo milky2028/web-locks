@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>Download</button>
+    <script>
+      const blob = new Blob(["some data here"], { type: "text/plain" });
+
+      const btn = document.querySelector("button");
+      btn.addEventListener("click", () => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "my-file.txt";
+        a.target = "_blank";
+
+        a.addEventListener("click", () => {
+          URL.revokeObjectURL(a.href);
+          a.remove();
+        });
+
+        document.body.appendChild(a);
+        a.click();
+      });
+    </script>
+  </body>
+</html>
