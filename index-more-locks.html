@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      function noop() {}
+
+      window.pswebHasDocumentCacheLock = false;
+      const ID = "same-id";
+
+      export function releaseLock(name) {
+        if (window.pswebHasDocumentCacheLock) {
+          return navigator.locks.request(name, { steal: true }, () => {
+            console.log("releasing lock");
+            window.pswebHasDocumentCacheLock = false;
+          });
+        }
+      }
+
+      export function createLock(name) {
+        console.log(`attempting to create lock`);
+        navigator.locks
+          .request(name, { ifAvailable: true }, (lock) => {
+            if (lock) {
+              console.log("request callback fired", lock);
+              window.pswebHasDocumentCacheLock = true;
+              return new Promise(noop);
+            }
+
+            console.log("unable to create lock");
+          })
+          .catch(noop);
+      }
+
+      createLock(ID);
+
+      setTimeout(() => {
+        console.log(`has the cache lock:`, window.pswebHasDocumentCacheLock);
+      }, 1000);
+
+      window.addEventListener("pagehide", async () => {
+        console.log("page hidden");
+        await releaseLock(ID);
+        console.log(`has the cache lock:`, window.pswebHasDocumentCacheLock);
+      });
+    </script>
+  </body>
+</html>

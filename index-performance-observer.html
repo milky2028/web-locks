@@ -7,12 +7,12 @@
     <title>Document</title>
   </head>
   <body>
-    <button>Do the thing</button>
     <script type="module">
-      const btn = document.querySelector("button");
-      btn.addEventListener("click", async () => {
-        await navigator.storage.persist();
+      const observer = new PerformanceObserver((list) => {
+        console.log(list);
       });
+
+      observer.observe({ type: "longtask" });
     </script>
   </body>
 </html>

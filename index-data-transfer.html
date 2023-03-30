@@ -7,12 +7,18 @@
     <title>Document</title>
   </head>
   <body>
-    <button>Do the thing</button>
+    <button>Stuff</button>
     <script type="module">
       const btn = document.querySelector("button");
-      btn.addEventListener("click", async () => {
-        await navigator.storage.persist();
+      btn.addEventListener("click", () => {
+        const clipboardData = new DataTransfer();
+        clipboardData.setData("text/plain", "Some stuff");
+        const event = new ClipboardEvent("paste", { clipboardData });
+
+        window.dispatchEvent(event);
       });
+
+      document.addEventListener("paste", (e) => console.log(e));
     </script>
   </body>
 </html>
