@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      const MIN = 1;
+      const MAX = 300;
+      const UPPER_STEP = 100;
+
+      const sizes = [
+        MIN,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        15,
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100,
+        125,
+        150,
+        175,
+        200,
+        225,
+        250,
+        275,
+        MAX,
+      ];
+
+      function getNextValue(value, change) {
+        if (value <= 1 && change === -1) {
+          return sizes[0];
+        }
+
+        const index = sizes.indexOf(value);
+        if (value === MAX) {
+          return change === 1 ? value + UPPER_STEP : sizes[index + change];
+        }
+
+        if (value > MAX) {
+          return change === 1 ? value + UPPER_STEP : value - UPPER_STEP;
+        }
+
+        if (index === -1) {
+          return sizes[0];
+        }
+
+        return sizes[index + change];
+      }
+
+      console.log("Should be 1", getNextValue(1, -1));
+      console.log("Should be 2", getNextValue(1, 1));
+      console.log("Should be 6", getNextValue(5, 1));
+      console.log("Should be 4", getNextValue(5, -1));
+      console.log("Should be 15", getNextValue(10, 1));
+      console.log("Should be 9", getNextValue(10, -1));
+      console.log("Should be 275", getNextValue(250, 1));
+      console.log("Should be 225", getNextValue(250, -1));
+      console.log("Should be 225", getNextValue(250, -1));
+      console.log("Should be 400", getNextValue(300, 1));
+      console.log("Should be 275", getNextValue(300, -1));
+      console.log("Should be 800", getNextValue(700, 1));
+      console.log("Should be 600", getNextValue(700, -1));
+    </script>
+  </body>
+</html>

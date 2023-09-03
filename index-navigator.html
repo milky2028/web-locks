@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input value="whatever" />
+    <button>Put this text in your clipboard</button>
+    <script type="module">
+      const input = document.querySelector("input");
+      const btn = document.querySelector("button");
+
+      const worker = new Worker("./worker.js");
+
+      function waitForThread() {
+        return new Promise((resolve) => {
+          worker.addEventListener("message", () => {
+            worker.terminate();
+            resolve();
+          });
+
+          worker.postMessage("from main thread");
+        });
+      }
+
+      btn.addEventListener("click", async () => {
+        await waitForThread();
+        // await fetch("https://jsonplaceholder.typicode.com/posts/1");
+
+        const clipboardItem = new ClipboardItem({
+          "text/plain": Promise.resolve(
+            new Blob([input.value], {
+              type: "text/plain",
+            })
+          ),
+        });
+
+        navigator.clipboard.write([clipboardItem]);
+      });
+    </script>
+  </body>
+</html>

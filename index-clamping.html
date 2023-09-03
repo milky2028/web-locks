@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="old" width="700" height="700"></canvas>
+    <canvas id="new" width="700" height="700"></canvas>
+    <script type="module">
+      import { data } from "./data.js";
+
+      function updateBrushOutlineDataUrl(imageData) {
+        const imageDataInverted = new ImageData(
+          imageData.width,
+          imageData.height
+        );
+
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          const alpha = imageData.data[i + 0];
+          const r = imageData.data[i + 1];
+          const g = imageData.data[i + 2];
+          const b = imageData.data[i + 3];
+          imageData.data[i + 0] = r;
+          imageData.data[i + 1] = g;
+          imageData.data[i + 2] = b;
+          imageData.data[i + 3] = alpha;
+          imageDataInverted.data[i + 0] = 255 - r;
+          imageDataInverted.data[i + 1] = 255 - g;
+          imageDataInverted.data[i + 2] = 255 - b;
+          imageDataInverted.data[i + 3] = alpha;
+        }
+
+        return imageDataInverted;
+      }
+
+      const dataArray = new Uint8ClampedArray(data);
+      const imageData = new ImageData(dataArray, dataArray.length / 4);
+
+      let start = performance.now();
+      let result = updateBrushOutlineDataUrl(imageData);
+      let end = performance.now();
+
+      console.log(result);
+      console.log("Time to Operate Old:", end - start);
+
+      function updateBrushOutlineDataUrlNew(imageData) {
+        const buffer = new Uint8ClampedArray(imageData.width * 4);
+
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          const alpha = imageData.data[i + 0];
+          const r = imageData.data[i + 1];
+          const g = imageData.data[i + 2];
+          const b = imageData.data[i + 3];
+          imageData.data[i + 0] = r;
+          imageData.data[i + 1] = g;
+          imageData.data[i + 2] = b;
+          imageData.data[i + 3] = alpha;
+          buffer[i + 0] = 255 - r;
+          buffer[i + 1] = 255 - g;
+          buffer[i + 2] = 255 - b;
+          buffer[i + 3] = alpha;
+        }
+
+        return new ImageData(buffer, imageData.width, imageData.height);
+      }
+
+      start = performance.now();
+      result = updateBrushOutlineDataUrlNew(imageData);
+      end = performance.now();
+
+      console.log(result);
+      console.log("Time to Operate New:", end - start);
+    </script>
+  </body>
+</html>

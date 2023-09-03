@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function countWaysToReachNthStairs(n) {
+        if (n === 0) {
+          return 1;
+        }
+
+        if (n === 1) {
+          return 1;
+        }
+
+        return (
+          countWaysToReachNthStairs(n - 1) + countWaysToReachNthStairs(n - 2)
+        );
+      }
+
+      // 1, 1, 1, 1 => 1
+      // 2, 1, 1
+      // 1, 2, 1
+      // 1, 1, 2
+      // 2, 2 => n / 2
+
+      // if (n is 6)
+      // count + 1
+      // count + n - 1
+      // count + n - 1
+      // count + n
+
+      // 1, 1, 1, 1, 1, 1 => n
+      // 2, 1, 1, 1, 1 => n - 1
+      // 1, 2, 1, 1, 1 => n - 1
+      // 1, 1, 2, 1, 1 => n - 1
+      // 1, 1, 1, 2, 1 => n - 1
+      // 1, 1, 1, 1, 2 => n - 1
+      // 2, 2, 1, 1 => n - 2
+      // 2, 1, 2, 1 => n - 2
+      // 2, 1, 1, 2 => n - 2
+      // 1, 1, 2, 2 => n - 2
+      // 1, 2, 1, 2 => n - 2
+      // 2, 2, 2 => n - 3
+
+      console.log(countWaysToReachNthStairs(1));
+      console.log(countWaysToReachNthStairs(2));
+      console.log(countWaysToReachNthStairs(4));
+    </script>
+  </body>
+</html>
