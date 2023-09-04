@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>element.animate issues Safari</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+      }
+
+      .box {
+        background-color: blueviolet;
+        width: 300px;
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box"></div>
+    <script type="module">
+      const box = document.querySelector(".box");
+
+      addEventListener("resize", () => {
+        requestAnimationFrame(async () => {
+          const { x, y } = box.getBoundingClientRect();
+          const centerX = window.innerWidth / 2;
+          const centerY = window.innerHeight / 2;
+
+          console.log(
+            `old x: ${x}, center x: ${centerX}, old y: ${y}, center y: ${centerY}`
+          );
+
+          const from = { transform: `translate(${x}, ${y})` };
+          const to = {
+            transform: `translate(${centerX - x}px, ${centerY - y}px)`,
+          };
+
+          await box.animate(to, {
+            fill: "forwards",
+            easing: "ease-out",
+            duration: 50,
+          }).finished;
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>Paste</button>
+    <script type="module">
+      const btn = document.querySelector("button");
+      btn.addEventListener("click", async () => {
+        await navigator.permissions.query({ name: "clipboard-read" });
+        const itemsInClipboard = await navigator.clipboard.read();
+
+        for (const item of itemsInClipboard) {
+          console.log(item);
+          const item = item;
+        }
+      });
+    </script>
+  </body>
+</html>

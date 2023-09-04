@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      async function promiseThing() {
+        await new Promise((resolve) => setTimeout(resolve, 50));
+        throw new Error("failure");
+      }
+
+      function executor() {
+        return promiseThing();
+      }
+
+      async function main() {
+        await executor();
+      }
+
+      main();
+    </script>
+  </body>
+</html>
