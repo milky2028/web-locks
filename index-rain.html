@@ -5,16 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
+      /* remove padding from the app */
       html,
       body {
         margin: 0;
         padding: 0;
       }
 
+      /* force all elements to act like border-box */
       * {
         box-sizing: border-box;
       }
 
+      /* center the canvas within the body element */
       body {
         display: grid;
         place-items: center;
@@ -25,48 +28,45 @@
   </head>
   <body>
     <canvas></canvas>
+    <!-- script type="module" allows you to use import and export functions directly and write more modern js, even though I don't actually do too much of that here -->
     <script type="module">
+      // get the canvas and its rendering context
       const canvas = document.querySelector("canvas");
       const ctx = canvas.getContext("2d");
 
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      // get browser window size
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-      canvas.width = w;
-      canvas.height = h;
+      // set canvas to be the same size as the window
+      canvas.width = width;
+      canvas.height = height;
 
-      const RAIN_DROP_SIZE = 16
-      const NUMBER_OF_RAIN_DROPS = 25_000
+      // manipulate these constants to change how the rain looks
+      const RAIN_DROP_SIZE = 16;
+      const NUMBER_OF_RAIN_DROPS = 25_000;
 
+      // function for creating a number from zero to size
       function range(size) {
         return Array.from(new Array(size).keys());
       }
 
+      // each rain drop is an instance of this class
       class RainDrop {
         #downwards = 1;
-        #rightwards = -1;
 
+        // the size and speed of every drop is random (with some bounds)
         #speed = Math.random() * 3;
         #size = Math.random() * 8;
 
-        #x = Math.random() * w;
-        #y = Math.random() * h;
+        // the x and y position of each rain drop is random
+        #x = Math.random() * width;
+        #y = Math.random() * height;
 
+        // call this function to move a raindrop
         move() {
-          if (this.#rightwards === 1) {
-            if (this.#x + this.#speed > w) {
-              this.#rightwards = -1;
-            }
-          }
-
-          if (this.#rightwards === -1) {
-            if (this.#x + this.#speed < 0) {
-              this.#rightwards = 1;
-            }
-          }
-
           if (this.#downwards === 1) {
-            if (this.#y + this.#speed > h) {
+            if (this.#y + this.#speed > height) {
               this.#downwards = -1;
             }
           }
@@ -77,33 +77,32 @@
             }
           }
 
-          // const destinationY = this.#y + this.#speed;
-
-          // this.#x += this.#speed * this.#rightwards;
-          // this.#y += this.#speed * this.#downwards;
           this.#y += this.#speed;
-
           this.draw();
         }
 
+        // canvas APIs for drawing rectangles
         draw() {
           ctx.fillStyle = "white";
-          ctx.fillRect(this.#x, this.#y, this.#size, this.#size, RAIN_DROP_SIZE);
+          ctx.fillRect(
+            this.#x,
+            this.#y,
+            this.#size,
+            this.#size,
+            RAIN_DROP_SIZE
+          );
         }
       }
 
-      let rainDrops = [];
+      // container array for all our rain drops
+      const rainDrops = range(NUMBER_OF_RAIN_DROPS).map(() => new RainDrop());
+      for (const drop of rainDrops) {
+        drop.draw();
+      }
 
+      // this is our main animation function, it recursively calls itself, but requestAnimationFrame will prevent it from being called more than once per frame
       function draw() {
-        ctx.clearRect(0, 0, w, h);
-        if (rainDrops.length === 0) {
-          rainDrops = range(NUMBER_OF_RAIN_DROPS).map(() => new RainDrop());
-
-          for (const drop of rainDrops) {
-            drop.draw();
-          }
-        }
-
+        ctx.clearRect(0, 0, width, height);
         for (const drop of rainDrops) {
           drop.move();
         }
