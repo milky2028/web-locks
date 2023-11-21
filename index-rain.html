@@ -35,13 +35,14 @@
       canvas.width = w;
       canvas.height = h;
 
-      const p = 16;
+      const RAIN_DROP_SIZE = 16
+      const NUMBER_OF_RAIN_DROPS = 25_000
 
       function range(size) {
         return Array.from(new Array(size).keys());
       }
 
-      class Thing {
+      class RainDrop {
         #downwards = 1;
         #rightwards = -1;
 
@@ -76,7 +77,7 @@
             }
           }
 
-          const destinationY = this.#y + this.#speed;
+          // const destinationY = this.#y + this.#speed;
 
           // this.#x += this.#speed * this.#rightwards;
           // this.#y += this.#speed * this.#downwards;
@@ -87,24 +88,24 @@
 
         draw() {
           ctx.fillStyle = "white";
-          ctx.fillRect(this.#x, this.#y, this.#size, this.#size, 16);
+          ctx.fillRect(this.#x, this.#y, this.#size, this.#size, RAIN_DROP_SIZE);
         }
       }
 
-      let things = [];
+      let rainDrops = [];
 
       function draw() {
         ctx.clearRect(0, 0, w, h);
-        if (things.length === 0) {
-          things = range(25_000).map(() => new Thing());
+        if (rainDrops.length === 0) {
+          rainDrops = range(NUMBER_OF_RAIN_DROPS).map(() => new RainDrop());
 
-          for (const thing of things) {
-            thing.draw();
+          for (const drop of rainDrops) {
+            drop.draw();
           }
         }
 
-        for (const thing of things) {
-          thing.move();
+        for (const drop of rainDrops) {
+          drop.move();
         }
 
         requestAnimationFrame(draw);
