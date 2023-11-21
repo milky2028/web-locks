@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: grid;
+        place-items: center;
+        background-color: black;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+    <script type="module">
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      canvas.width = w;
+      canvas.height = h;
+
+      const p = 16;
+
+      function range(size) {
+        return Array.from(new Array(size).keys());
+      }
+
+      class Thing {
+        #downwards = 1;
+        #rightwards = -1;
+
+        #speed = Math.random() * 3;
+        #size = Math.random() * 8;
+
+        #x = Math.random() * w;
+        #y = Math.random() * h;
+
+        move() {
+          if (this.#rightwards === 1) {
+            if (this.#x + this.#speed > w) {
+              this.#rightwards = -1;
+            }
+          }
+
+          if (this.#rightwards === -1) {
+            if (this.#x + this.#speed < 0) {
+              this.#rightwards = 1;
+            }
+          }
+
+          if (this.#downwards === 1) {
+            if (this.#y + this.#speed > h) {
+              this.#downwards = -1;
+            }
+          }
+
+          if (this.#downwards === -1) {
+            if (this.#y + this.#speed < 0) {
+              this.#downwards = 1;
+            }
+          }
+
+          const destinationY = this.#y + this.#speed;
+
+          // this.#x += this.#speed * this.#rightwards;
+          // this.#y += this.#speed * this.#downwards;
+          this.#y += this.#speed;
+
+          this.draw();
+        }
+
+        draw() {
+          ctx.fillStyle = "white";
+          ctx.fillRect(this.#x, this.#y, this.#size, this.#size, 16);
+        }
+      }
+
+      let things = [];
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        if (things.length === 0) {
+          things = range(25_000).map(() => new Thing());
+
+          for (const thing of things) {
+            thing.draw();
+          }
+        }
+
+        for (const thing of things) {
+          thing.move();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>
