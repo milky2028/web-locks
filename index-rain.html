@@ -53,8 +53,6 @@
 
       // each rain drop is an instance of this class
       class RainDrop {
-        #downwards = 1;
-
         // the size and speed of every drop is random (with some bounds)
         #speed = Math.random() * 3;
         #size = Math.random() * 8;
@@ -65,18 +63,6 @@
 
         // call this function to move a raindrop
         move() {
-          if (this.#downwards === 1) {
-            if (this.#y + this.#speed > height) {
-              this.#downwards = -1;
-            }
-          }
-
-          if (this.#downwards === -1) {
-            if (this.#y + this.#speed < 0) {
-              this.#downwards = 1;
-            }
-          }
-
           this.#y += this.#speed;
           this.draw();
         }
