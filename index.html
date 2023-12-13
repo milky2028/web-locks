@@ -28,6 +28,8 @@
     }
 
     document.addEventListener("paste", async (event) => {
+      console.log(event.clipboardData.types);
+
       console.log(`syncClipboardHasFile: ${syncClipboardHasImage(event)}`);
       console.log(`asyncClipboardHasFile: ${await asyncClipboardHasImage()}`);
     });
