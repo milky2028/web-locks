@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      (async () => {
+        const downloadFile = async (handle) => {
+          const file = await handle.getFile();
+          const url = URL.createObjectURL(file);
+
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = handle.name;
+
+          a.target = "_blank";
+          a.click();
+          console.log(`${handle.name} downloaded`);
+        };
+
+        const root = await navigator.storage.getDirectory();
+        const dcx = await root.getDirectoryHandle("dcx");
+
+        const urn = await dcx.getDirectoryHandle(
+          "urn-aaid-sc-VA6C2-383aa1c0-5795-47c6-b04d-831c06753945"
+        );
+
+        const manifestHandle = await urn.getFileHandle("manifest");
+        await downloadFile(manifestHandle);
+
+        const pushHandle = await urn.getFileHandle("push.journal");
+        await downloadFile(pushHandle);
+
+        const baseHandle = await urn.getFileHandle("manifest.base");
+        await downloadFile(baseHandle);
+
+        const components = await urn.getDirectoryHandle("components");
+        for await (const [, handle] of components) {
+          await downloadFile(handle);
+        }
+      })();
+    </script>
+  </body>
+</html>
