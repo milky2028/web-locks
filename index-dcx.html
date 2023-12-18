@@ -25,17 +25,14 @@
         const dcx = await root.getDirectoryHandle("dcx");
 
         const urn = await dcx.getDirectoryHandle(
-          "urn-aaid-sc-VA6C2-383aa1c0-5795-47c6-b04d-831c06753945"
+          "urn-aaid-sc-VA6C2-1442aeb5-5030-3fd0-aec3-15f2027229e6"
         );
 
-        const manifestHandle = await urn.getFileHandle("manifest");
-        await downloadFile(manifestHandle);
-
-        const pushHandle = await urn.getFileHandle("push.journal");
-        await downloadFile(pushHandle);
-
-        const baseHandle = await urn.getFileHandle("manifest.base");
-        await downloadFile(baseHandle);
+        for await (const [, handle] of urn) {
+          if (handle.kind !== "directory") {
+            await downloadFile(handle);
+          }
+        }
 
         const components = await urn.getDirectoryHandle("components");
         for await (const [, handle] of components) {
