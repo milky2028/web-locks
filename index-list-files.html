@@ -10,7 +10,7 @@
       (async () => {
         const root = await navigator.storage.getDirectory();
 
-        async function buildPath(handle, path) {
+        async function buildPath(handle, path = "") {
           if (handle.kind === "directory") {
             for await (const [, nestedHandle] of handle) {
               buildPath(nestedHandle, `${path}/${nestedHandle.name}`);
@@ -20,7 +20,7 @@
           }
         }
 
-        await buildPath(root, "");
+        await buildPath(root);
       })();
     </script>
   </body>
