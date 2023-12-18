@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      export async function getHandle(path, { type = "directory", create = false } = {}) {
+        const segments = path.split("/").filter(Boolean);
+        const lastSegment = segments.pop();
+
+        if (!lastSegment) {
+          throw new Error("invalid-path");
+        }
+
+        let directory = await navigator.storage.getDirectory();
+        for (const segment of segments) {
+          // eslint-disable-next-line no-await-in-loop
+          directory = await directory.getDirectoryHandle(segment, { create });
+        }
+
+        return type === "directory"
+          ? directory.getDirectoryHandle(lastSegment, { create })
+          : directory.getFileHandle(lastSegment, { create });
+      }
+
+      const handle = await getHandle("/urn-aaid-sc-VA6C2-1442aeb5-5030-3fd0-aec3-15f2027229e6/blurb.json", {
+        create: true,
+      });
+      console.log(handle);
+    </script>
+  </body>
+</html>
