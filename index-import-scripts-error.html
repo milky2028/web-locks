@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" />
+    <script type="module">
+      const worker = new Worker("./import-worker.js");
+
+      const input = document.querySelector("input");
+      input.addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        worker.postMessage({ file });
+
+        worker.addEventListener("message", async ({ data }) => {
+          if (data === "done") {
+            const root = await navigator.storage.getDirectory();
+            const handle = await root.getFileHandle(file.name, {
+              create: false,
+            });
+
+            const file = await handle.getFile();
+            console.log("file size", file.size);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

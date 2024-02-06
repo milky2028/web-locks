@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blob Video Source</title>
+  </head>
+  <body>
+    <script type="module">
+      const videoFile = await fetch("/sample.mp4");
+      const buffer = await videoFile.arrayBuffer();
+
+      const newBlob = new Blob([buffer], { type: "video/mp4" });
+      const url = URL.createObjectURL(newBlob);
+
+      const video = document.createElement("video");
+      video.width = "500";
+      video.height = "300";
+      video.controls = true;
+
+      const source = document.createElement("source");
+      source.src = url;
+      source.type = "video/mp4";
+
+      video.appendChild(source);
+      document.body.appendChild(video);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      (async () => {
+        const highEntropyValues =
+          "userAgentData" in navigator
+            ? await navigator.userAgentData.getHighEntropyValues([
+                "bitness",
+                "formFactor",
+                "fullVersionList",
+                "model",
+                "platformVersion",
+                "uaFullVersion",
+                "wow64",
+              ])
+            : `browser can't access high entropy values`;
+
+        const userData = {
+          wasmMemory: !!globalThis.wasmMemory,
+          hasOpfs: typeof navigator.storage.getDirectory === "function",
+          storageSpace:
+            (await navigator.storage.estimate?.()) ??
+            `browser can't assess storage space`,
+          hardwareConcurrency:
+            navigator.hardwareConcurrency ??
+            `browser can't check hardwareConcurrency`,
+          deviceMemory:
+            navigator.deviceMemory ?? `browser can't check deviceMemory`,
+          highEntropyValues,
+        };
+
+        console.log(JSON.stringify(userData));
+      })();
+    </script>
+  </body>
+</html>
