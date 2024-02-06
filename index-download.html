@@ -9,23 +9,19 @@
   <body>
     <button>Download</button>
     <script>
-      const blob = new Blob(["some data here"], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href =
+        "blob:https://videos.sproutvideo.com/11f1cf19-ffa9-4557-a595-afe3498d62b9";
+      a.download = "my-file.txt";
+      a.target = "_blank";
 
-      const btn = document.querySelector("button");
-      btn.addEventListener("click", () => {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "my-file.txt";
-        a.target = "_blank";
-
-        a.addEventListener("click", () => {
-          URL.revokeObjectURL(a.href);
-          a.remove();
-        });
-
-        document.body.appendChild(a);
-        a.click();
+      a.addEventListener("click", () => {
+        URL.revokeObjectURL(a.href);
+        a.remove();
       });
+
+      document.body.appendChild(a);
+      a.click();
     </script>
   </body>
 </html>
