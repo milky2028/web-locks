@@ -10,7 +10,7 @@
       const __old = FileSystemFileHandle.prototype.getFile;
       FileSystemFileHandle.prototype.getFile = function (...args) {
         console.log("tyler ==> getFile called");
-        __old.call(this, ...args);
+        return __old.call(this, ...args);
       };
 
       const root = await navigator.storage.getDirectory();
