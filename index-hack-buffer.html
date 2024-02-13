@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      const __old = Blob.prototype.arrayBuffer;
+      Blob.prototype.arrayBuffer = function (...args) {
+        console.log("tyler ==> buffer created");
+        return __old.call(this, ...args);
+      };
+
+      const root = await navigator.storage.getDirectory();
+      for await (const [, handle] of root) {
+        const file = await handle.getFile();
+        const buffer = await file.arrayBuffer();
+      }
+    </script>
+  </body>
+</html>
