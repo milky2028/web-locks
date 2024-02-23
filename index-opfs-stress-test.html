@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>Upload an archive and its contents will be written to OPFS.</div>
+    <br />
+    <input type="file" accept=".zip,.rar,.cbr,.cbz" />
+    <ul></ul>
+    <script>
+      const worker = new Worker("./archive-worker.js", { type: "module" });
+
+      const list = document.querySelector("ul");
+      worker.addEventListener("message", (event) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = event.data;
+        list.appendChild(listItem);
+      });
+
+      const input = document.querySelector("input");
+      input.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        worker.postMessage({ file });
+      });
+    </script>
+  </body>
+</html>
