@@ -74,19 +74,19 @@ self.addEventListener("message", async ({ data: { file } }) => {
   postMessage("Archive allocated, reading entries...");
 
   // simultaneous
-  // const writes = Array.from(readArchiveEntries(allocatedArchiveFile)).map(
-  //   async (entry) => {
-  //     if (entry) {
-  //       await writeFile(entry.fileName, entry.file);
-  //     }
-  //   }
-  // );
-  // await Promise.all(writes);
+  const writes = Array.from(readArchiveEntries(allocatedArchiveFile)).map(
+    async (entry) => {
+      if (entry) {
+        await writeFile(entry.fileName, entry.file);
+      }
+    }
+  );
+  await Promise.all(writes);
 
   // sequential writes
-  for (const entry of readArchiveEntries(allocatedArchiveFile)) {
-    await writeFile(entry.fileName, entry.file);
-  }
+  // for (const entry of readArchiveEntries(allocatedArchiveFile)) {
+  //   await writeFile(entry.fileName, entry.file);
+  // }
 
   postMessage("Wrote all files from archive.");
 });
