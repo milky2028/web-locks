@@ -1,6 +1,6 @@
 /// <reference lib="WebWorker" />;
 
-globalThis.wasmURL = "./extract.wasm";
+globalThis.wasmURL = "./extract.debug.wasm";
 postMessage("Worker initialized...");
 
 async function writeFile(path, file) {
@@ -23,7 +23,7 @@ async function writeFile(path, file) {
 
 self.addEventListener("message", async ({ data: { file } }) => {
   postMessage("Message received...");
-  const { default: initialize } = await import("./extract.js");
+  const { default: initialize } = await import("./extract.debug.js");
   postMessage("WASM glue code loaded...");
 
   const wasm = await initialize();
