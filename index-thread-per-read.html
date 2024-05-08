@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>read one file per thread</button>
+    <script>
+      const btn = document.querySelector("button");
+      btn.addEventListener("click", async () => {
+        console.log("Initializing directories...");
+        const root = await navigator.storage.getDirectory();
+        const tmp = await root.getDirectoryHandle("tmp", { create: false });
+
+        const fileNames = [];
+        for await (const [name] of tmp) {
+          if (fileNames.length < 10) {
+            fileNames.push(name);
+          }
+        }
+        console.log("Acquired filenames...", fileNames);
+
+        const reads = fileNames.map((fileName) => {
+          const worker = new Worker("./single-read.js");
+
+          return new Promise((resolve) => {
+            // worker.addEventListener("message", ({ data }) => {
+            //   resolve(data);
+            // });
+
+            worker.postMessage({ fileName });
+          });
+        });
+
+        console.log("Creating threads...");
+        await Promise.all(reads);
+      });
+    </script>
+  </body>
+</html>

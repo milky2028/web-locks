@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" value="Submit File" multiple />
+    <script type="module">
+      export async function getHandle(path, params) {
+        const kind = params?.kind ?? "file";
+        const create = params?.create ?? false;
+
+        const segments = path.split("/").filter(Boolean);
+        const fileName = segments.pop();
+
+        if (!fileName || path.endsWith("/")) {
+          throw new Error("invalid-path");
+        }
+
+        let directory = await navigator.storage.getDirectory();
+        for (const segment of segments) {
+          directory = await directory.getDirectoryHandle(segment, { create });
+        }
+
+        return kind === "directory"
+          ? directory
+          : directory.getFileHandle(fileName, { create });
+      }
+
+      let timer;
+      let worker;
+
+      export default async function writeFileStream(path, stream) {
+        const handle = await getHandle(path, { create: true });
+        // if ("createWritable" in handle) {
+        //   const writer = await handle.createWritable();
+        //   return file.stream().pipeTo(writer);
+        // }
+
+        return new Promise((resolve, reject) => {
+          const id = crypto.randomUUID();
+          if (!worker) {
+            console.log("creating worker");
+            worker = new Worker("./writeWorker.js", { type: "module" });
+          }
+
+          worker.addEventListener(
+            "message",
+            ({ data: { id: responseId, status, error } }) => {
+              if (responseId === id) {
+                if (status === "success") {
+                  console.log("write successful");
+                  resolve();
+                } else {
+                  console.log("write failed");
+                  reject(error);
+                }
+
+                timer = setTimeout(() => {
+                  console.log("terminating worker from timeout");
+                  worker?.terminate();
+                }, 5_000);
+              }
+            }
+          );
+
+          console.log("clearing timer");
+          clearTimeout(timer);
+          const payload = { id, path, stream };
+          worker.postMessage(payload);
+        });
+      }
+
+      const input = document.querySelector("input");
+      input.addEventListener("change", (event) => {
+        const writes = Array.from(event.currentTarget.files).map((file) =>
+          writeFileStream(`/${file.name}`, file)
+        );
+
+        Promise.all(writes);
+      });
+    </script>
+  </body>
+</html>

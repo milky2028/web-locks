@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <sp-theme scale="large" color="dark"></sp-theme>
+    <script>
+      // spectrum web components creates clashes in custom element names, so we prevent that by checking if the element is registered first
+      const customElementsDefineOriginal =
+        customElements.define.bind(customElements);
+      customElements.define = (name, element) => {
+        if (!customElements.get(name)) {
+          customElementsDefineOriginal(name, element);
+        }
+      };
+    </script>
+    <script
+      async
+      src="https://ga.jspm.io/npm:es-module-shims@1.9.0/dist/es-module-shims.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@spectrum-web-components/button/sp-button.js": "https://ga.jspm.io/npm:@spectrum-web-components/button@0.42.2/sp-button.dev.js",
+          "@spectrum-web-components/overlay": "https://ga.jspm.io/npm:@spectrum-web-components/overlay@0.42.2/src/index.dev.js",
+          "lit": "https://ga.jspm.io/npm:lit@3.1.2/index.js"
+        },
+        "scopes": {
+          "https://ga.jspm.io/": {
+            "@floating-ui/core": "https://ga.jspm.io/npm:@floating-ui/core@1.6.0/dist/floating-ui.core.mjs",
+            "@floating-ui/dom": "https://ga.jspm.io/npm:@floating-ui/dom@1.6.3/dist/floating-ui.dom.mjs",
+            "@floating-ui/utils": "https://ga.jspm.io/npm:@floating-ui/utils@0.2.1/dist/floating-ui.utils.mjs",
+            "@floating-ui/utils/dom": "https://ga.jspm.io/npm:@floating-ui/utils@0.2.1/dist/floating-ui.utils.dom.mjs",
+            "@lit-labs/observers/mutation-controller.js": "https://ga.jspm.io/npm:@lit-labs/observers@2.0.2/development/mutation-controller.js",
+            "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@2.0.4/development/reactive-element.js",
+            "@lit/reactive-element/decorators/": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.3/development/decorators/",
+            "@spectrum-web-components/base": "https://ga.jspm.io/npm:@spectrum-web-components/base@0.42.2/src/index.dev.js",
+            "@spectrum-web-components/base/src/condition-attribute-with-id.js": "https://ga.jspm.io/npm:@spectrum-web-components/base@0.42.2/src/condition-attribute-with-id.dev.js",
+            "@spectrum-web-components/base/src/decorators.js": "https://ga.jspm.io/npm:@spectrum-web-components/base@0.42.2/src/decorators.dev.js",
+            "@spectrum-web-components/base/src/define-element.js": "https://ga.jspm.io/npm:@spectrum-web-components/base@0.42.2/src/define-element.dev.js",
+            "@spectrum-web-components/base/src/directives.js": "https://ga.jspm.io/npm:@spectrum-web-components/base@0.42.2/src/directives.dev.js",
+            "@spectrum-web-components/base/src/version.js": "https://ga.jspm.io/npm:@spectrum-web-components/base@0.42.2/src/version.js",
+            "@spectrum-web-components/overlay/sp-overlay.js": "https://ga.jspm.io/npm:@spectrum-web-components/overlay@0.42.2/sp-overlay.dev.js",
+            "@spectrum-web-components/progress-circle/sp-progress-circle.js": "https://ga.jspm.io/npm:@spectrum-web-components/progress-circle@0.42.2/sp-progress-circle.dev.js",
+            "@spectrum-web-components/reactive-controllers/src/ElementResolution.js": "https://ga.jspm.io/npm:@spectrum-web-components/reactive-controllers@0.42.2/src/ElementResolution.dev.js",
+            "@spectrum-web-components/shared": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/index.dev.js",
+            "@spectrum-web-components/shared/src/first-focusable-in.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/first-focusable-in.dev.js",
+            "@spectrum-web-components/shared/src/focusable.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/focusable.dev.js",
+            "@spectrum-web-components/shared/src/get-label-from-slot.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/get-label-from-slot.dev.js",
+            "@spectrum-web-components/shared/src/like-anchor.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/like-anchor.dev.js",
+            "@spectrum-web-components/shared/src/observe-slot-text.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/observe-slot-text.dev.js",
+            "@spectrum-web-components/shared/src/platform.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/platform.dev.js",
+            "@spectrum-web-components/shared/src/random-id.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/random-id.dev.js",
+            "@spectrum-web-components/shared/src/reparent-children.js": "https://ga.jspm.io/npm:@spectrum-web-components/shared@0.42.2/src/reparent-children.dev.js",
+            "focus-visible": "https://ga.jspm.io/npm:focus-visible@5.2.0/dist/focus-visible.js",
+            "lit": "https://ga.jspm.io/npm:lit@2.8.0/index.js",
+            "lit-element/lit-element.js": "https://ga.jspm.io/npm:lit-element@4.0.4/development/lit-element.js",
+            "lit-html": "https://ga.jspm.io/npm:lit-html@3.1.2/development/lit-html.js",
+            "lit-html/": "https://ga.jspm.io/npm:lit-html@2.8.0/development/",
+            "lit/": "https://ga.jspm.io/npm:lit@2.8.0/"
+          },
+          "https://ga.jspm.io/npm:lit-element@3.3.3/": {
+            "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.3/development/reactive-element.js",
+            "lit-html": "https://ga.jspm.io/npm:lit-html@2.8.0/development/lit-html.js"
+          },
+          "https://ga.jspm.io/npm:lit@2.8.0/": {
+            "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.3/development/reactive-element.js",
+            "lit-element/lit-element.js": "https://ga.jspm.io/npm:lit-element@3.3.3/development/lit-element.js",
+            "lit-html": "https://ga.jspm.io/npm:lit-html@2.8.0/development/lit-html.js",
+            "lit-html/is-server.js": "https://ga.jspm.io/npm:lit-html@2.8.0/development/is-server.js"
+          }
+        }
+      }
+    </script>
+    <script type="module">
+      import { LitElement, html, render } from "lit";
+      import { trigger } from "@spectrum-web-components/overlay";
+      import "@spectrum-web-components/button/sp-button.js";
+
+      class Popover1 extends LitElement {
+        render() {
+          return 1;
+        }
+      }
+      customElements.define("t-popover-one", Popover1);
+
+      class Popover2 extends LitElement {
+        render() {
+          return 2;
+        }
+      }
+      customElements.define("t-popover-two", Popover2);
+
+      class Container extends LitElement {
+        render() {
+          return html`<sp-theme scale="large" color="dark">
+            <sp-button ${trigger(() => html`<t-popover-one></t-popover-one`)}>
+              1
+            </sp-button>
+            <sp-button>2</sp-button>
+          </sp-theme>`;
+        }
+      }
+
+      customElements.define("t-container", Container);
+      render(html`<t-container></t-container>`, document.body);
+    </script>
+  </body>
+</html>

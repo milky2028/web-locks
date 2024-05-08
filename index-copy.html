@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      const object1 = { thing: "thing val", other: "other val" };
+      const entries = Object.entries(object1).map(([key, value]) => [
+        key,
+        key === "other" ? "modified" : value,
+      ]);
+      console.log("original", object1);
+      console.log("copy", Object.fromEntries(entries));
+
+      function isArray(data) {
+        if (typeof data !== "object" && data !== null) {
+        }
+      }
+    </script>
+  </body>
+</html>

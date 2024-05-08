@@ -10,5 +10,3 @@ async function handler(): Promise<Response> {
 
 console.log(`HTTP webserver running. Access it at: http://localhost:8080/`);
 await serve(handler, { port });
-
-const someOtherStuff = 'stuff';
