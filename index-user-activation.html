@@ -14,7 +14,7 @@
       const btn = document.querySelector("button");
       const result = document.querySelector("#result");
 
-      btn.addEventListener("click", async () => {
+      async function pullTextFromClipboardAndWriteToScreen() {
         try {
           result.style.color = "black";
           result.textContent = await navigator.clipboard.readText();
@@ -22,17 +22,13 @@
           result.style.color = "red";
           result.textContent = e.message;
         }
+      }
+
+      btn.addEventListener("click", async () => {
+        await pullTextFromClipboardAndWriteToScreen();
       });
 
-      try {
-        const text = await navigator.clipboard.readText();
-
-        result.style.color = "black";
-        result.textContent = text;
-      } catch (e) {
-        result.style.color = "red";
-        result.textContent = e.message;
-      }
+      await pullTextFromClipboardAndWriteToScreen();
     </script>
   </body>
 </html>
