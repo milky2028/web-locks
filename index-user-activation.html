@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Activation API</title>
+  </head>
+  <body>
+    <button>Pull Text From Clipboard</button>
+    <p>Here's what's in your clipboard:</p>
+    <p id="result"></p>
+    <p id="activation"></p>
+    <script type="module">
+      const btn = document.querySelector("button");
+      const result = document.querySelector("#result");
+
+      btn.addEventListener("click", async () => {
+        try {
+          result.style.color = "black";
+          result.textContent = await navigator.clipboard.readText();
+        } catch (e) {
+          result.style.color = "red";
+          result.textContent = e.message;
+        }
+      });
+
+      try {
+        const text = await navigator.clipboard.readText();
+
+        result.style.color = "black";
+        result.textContent = text;
+      } catch (e) {
+        result.style.color = "red";
+        result.textContent = e.message;
+      }
+    </script>
+  </body>
+</html>
