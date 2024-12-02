@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>Read File</button>
+    <input type="file" />
+    <script type="module">
+      const input = document.querySelector("input");
+      input.addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        name = file.name;
+
+        const root = await navigator.storage.getDirectory();
+        const handle = await root.getFileHandle(name, {
+          create: true,
+        });
+        const writer = await handle.createWritable();
+        await file.stream().pipeTo(writer);
+      });
+
+      const read = document.querySelector("button");
+      read.addEventListener("click", async () => {
+        const root = await navigator.storage.getDirectory();
+        const readHandle = await root.getFileHandle("some-file.txt");
+        const file = await readHandle.getFile();
+        const buffer = new Uint8Array(await file.arrayBuffer());
+
+        await root.removeEntry("some-file.txt");
+
+        console.log(buffer);
+      });
+    </script>
+  </body>
+</html>
