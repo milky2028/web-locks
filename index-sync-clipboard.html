@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <img />
+  <script type="module">
+    // the sync clipboard API blocks the DOM and should be used only in cases where the async clipboard API fails, as is the case when the user copies a file
+
+    /**
+     * @param {ClipboardEvent} event
+     */
+    function syncClipboardHasImage(event) {
+      const files = Array.from(event.clipboardData.files);
+      return (
+        event.clipboardData.types.includes("Files") &&
+        files.some((file) => file.name.match(/.jpg|.jpeg|.png|$/))
+      );
+    }
+
+    // if the image was copied from the user's filesystem, the async clipboard API will not recognize it, only the title
+    async function asyncClipboardHasImage() {
+      const items = await navigator.clipboard.read();
+      return items.flatMap((item) => item.types).includes("image/png");
+    }
+
+    document.addEventListener("paste", async (event) => {
+      console.log(event.clipboardData.types);
+
+      console.log(`syncClipboardHasFile: ${syncClipboardHasImage(event)}`);
+      console.log(`asyncClipboardHasFile: ${await asyncClipboardHasImage()}`);
+    });
+  </script>
+</html>
