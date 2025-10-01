@@ -1,36 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Paint</title>
-  </head>
-  <body>
-    <button>Just a button</button>
-    <script type="module">
-      function perfNowMeasure() {
-        requestAnimationFrame(() => {
-          const start = performance.now();
-          requestAnimationFrame(() => {
-            const end = performance.now();
-            console.log("performance.now", end - start);
-            perfNowMeasure();
-          });
-        });
-      }
-
-      perfNowMeasure();
-
-      function rafMeasure() {
-        requestAnimationFrame((start) => {
-          requestAnimationFrame((end) => {
-            console.log("requestAnimationFrame timestamp:", end - start);
-            rafMeasure();
-          });
-        });
-      }
-
-      rafMeasure();
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="module">
+    const worker = new Worker('./worker.js')
+  </script>
+</body>
 </html>

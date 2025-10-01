@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      globalThis.Module = {
+        cwrap: () => {},
+      };
+
+      function updateRecords(records) {
+        try {
+          let updatedRecords = [];
+          for (rec of records) {
+            rec["syncFlag"] = 0;
+            updatedRecords.push(rec);
+          }
+          return updatedRecords;
+        } catch (e) {
+          console.error(e);
+          ACPLJSLogger.log(
+            LogLevels.ERR,
+            COMP_NAME,
+            "_upgradeDatabaseFromVersion1: updateRecords: Aborting transaction due to exception",
+            e
+          );
+          txn.abort();
+          return; // return undefined
+        }
+      }
+
+      updateRecords([1, 2]);
+    </script>
+    <!-- <script type="module" src="./IndexedDBDataAccess.js"></script> -->
+  </body>
+</html>

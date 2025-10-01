@@ -1,4 +1,5 @@
-console.log("running code from worker ");
+console.log("running code from worker", globalThis.sessionStorage);
+
 self.addEventListener("message", () => {
   setTimeout(() => {
     self.postMessage("from worker");
